@@ -3,28 +3,57 @@
 [notice] To update, run: pip install --upgrade pip
 AIRTABLE_BASE_ID -> secret:false  variable:false
 SLACK_CHANNEL    -> secret:false  variable:false
-resolved AIRTABLE_BASE_ID: MISSING
-resolved SLACK_CHANNEL:    MISSING
+resolved AIRTABLE_BASE_ID: set
+resolved SLACK_CHANNEL:    set
 == pipeline start ==
-{"run_id": "69139302980e", "event": "start", "level": "info", "stage": "briefs", "dry_run": false}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "ahrefs_search", "count": 3}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "brandradar", "count": 2}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "gsc", "count": 1}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "google_trends", "count": 2}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "social", "count": 2}
-{"run_id": "69139302980e", "event": "ingest", "level": "info", "source": "news", "count": 1}
-{"run_id": "69139302980e", "event": "score", "level": "info", "trends": 8, "escalated": 3, "min_sources": 2, "min_brand_fit": 0.7}
-[
-  {
-    "fields": {
-      "Brand": "polar",
-      "Score": 78.0,
-      "Sources": 2,
-      "Rationale": "2 sources; driven by demand 1.00, freshness 1.00",
-*Weekly trend shortlist* — approve to brief:
-2. *74.5* · [galapagos] which galapagos cruise is best for families — 2 sources; driven by freshness 1.00, competitive_gap 0.90
-3. *65.3* · [polar] best time to see penguins antarctica — 2 sources; driven by freshness 1.00, brand_fit 0.85
-{"run_id": "69139302980e", "event": "done", "level": "info", "signals": 11, "trends": 8, "escalated": 3, "briefed": 3, "source_errors": 0}
-
-DONE · signals=11 trends=8 escalated=3 briefed=3
-PIPELINE_EXIT=0
+{"run_id": "7b0212802ded", "event": "start", "level": "info", "stage": "briefs", "dry_run": false}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "ahrefs_search", "count": 3}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "brandradar", "count": 2}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "gsc", "count": 1}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "google_trends", "count": 2}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "social", "count": 2}
+{"run_id": "7b0212802ded", "event": "ingest", "level": "info", "source": "news", "count": 1}
+{"run_id": "7b0212802ded", "event": "score", "level": "info", "trends": 8, "escalated": 3, "min_sources": 2, "min_brand_fit": 0.7}
+{"run_id": "7b0212802ded", "event": "http", "level": "warn", "url": "https://api.airtable.com/v0/appSeOYXfUUEPDZwz/Trends", "error": "InvalidHeader", "attempt": 1, "retry_in": 0.5}
+{"run_id": "7b0212802ded", "event": "http", "level": "warn", "url": "https://api.airtable.com/v0/appSeOYXfUUEPDZwz/Trends", "error": "InvalidHeader", "attempt": 2, "retry_in": 1.0}
+{"run_id": "7b0212802ded", "event": "fatal", "level": "error", "error": "InvalidHeader(\"Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer pat1w5dxqV767UkS3.34d2fed2b006600c4055691aa4bad27de71a0c7d76105e975f2b1c0f07645bab\\\\n\\\\nAIRTABLE_BASE_ID = appSeOYXfUUEPDZwz'\")"}
+{"run_id": "7b0212802ded", "event": "http", "level": "warn", "url": "https://slack.com/api/chat.postMessage", "error": "InvalidHeader", "attempt": 1, "retry_in": 0.5}
+{"run_id": "7b0212802ded", "event": "http", "level": "warn", "url": "https://slack.com/api/chat.postMessage", "error": "InvalidHeader", "attempt": 2, "retry_in": 1.0}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/pipeline.py", line 120, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/pipeline.py", line 113, in main
+    result = run_pipeline(stage=args.stage, dry_run=args.dry_run)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/pipeline.py", line 54, in run_pipeline
+    return _run(stage, dry_run, settings, run_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/pipeline.py", line 90, in _run
+    deliver_airtable(briefed or escalated, settings, dry_run=dry_run, run_id=run_id)
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/deliver/airtable.py", line 56, in deliver_airtable
+    request_with_retries("PATCH", url, policy=RetryPolicy(), run_id=run_id,
+  File "/home/runner/work/trend-intelligence-engine/trend-intelligence-engine/src/trendengine/obs.py", line 66, in request_with_retries
+    resp = requests.request(method, url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/api.py", line 71, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/sessions.py", line 635, in request
+    prep = self.prepare_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/sessions.py", line 541, in prepare_request
+    p.prepare(
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/models.py", line 440, in prepare
+    self.prepare_headers(headers)
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/models.py", line 570, in prepare_headers
+    check_header_validity(header)
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/utils.py", line 1095, in check_header_validity
+    _validate_header_part(header, value, 1)
+  File "/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/requests/utils.py", line 1116, in _validate_header_part
+    raise InvalidHeader(
+requests.exceptions.InvalidHeader: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer pat1w5dxqV767UkS3.34d2fed2b006600c4055691aa4bad27de71a0c7d76105e975f2b1c0f07645bab\n\nAIRTABLE_BASE_ID = appSeOYXfUUEPDZwz'
+[alert] :rotating_light: trend-engine run 7b0212802ded FAILED — stage=briefs: InvalidHeader("Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer pat1w5dxqV767UkS3.34d2fed2b006600c4055691aa4bad27de71a0c7d76105e975f2b1c0f07645bab\\n\\nAIRTABLE_BASE_ID = appSeOYXfUUEPDZwz'")
+PIPELINE_EXIT=1
