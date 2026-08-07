@@ -1,0 +1,62 @@
+name: monthly-refresh
+
+# Once-a-month full run of the engine, in GitHub's cloud — no connector,
+# no manual push. Runs the whole pipeline (stage=all) and can optionally
+# fan out to sibling repos so they refresh off the same run.
+#
+# Credentials live in this repo's Actions secrets. The optional cross-repo
+# fan-out uses a stored PAT secret named REPO_PAT (see INTEGRATION.md).
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"        # 06:00 UTC on the 1st of each month
+  workflow_dispatch: {}         # allows a manual run from the Actions tab
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+
+      - name: Run full pipeline
+        run: python -m trendengine.pipeline --stage all
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AHREFS_API_KEY: ${{ secrets.AHREFS_API_KEY }}
+          GSC_CREDENTIALS: ${{ secrets.GSC_CREDENTIALS }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+
+      # Optional: tell sibling repos to refresh, too. No-op unless BOTH a
+      # REPO_PAT secret and a SIBLING_REPOS variable (comma-separated
+      # "owner/repo,owner/repo") are set — so it never fails when unconfigured.
+      - name: Fan out to sibling repos
+        env:
+          REPO_PAT: ${{ secrets.REPO_PAT }}
+          SIBLING_REPOS: ${{ vars.SIBLING_REPOS }}
+        run: |
+          if [ -z "$REPO_PAT" ] || [ -z "$SIBLING_REPOS" ]; then
+            echo "No REPO_PAT or SIBLING_REPOS set — skipping cross-repo fan-out."
+            exit 0
+          fi
+          IFS=',' read -ra REPOS <<< "$SIBLING_REPOS"
+          for repo in "${REPOS[@]}"; do
+            repo="$(echo "$repo" | xargs)"   # trim whitespace
+            echo "Dispatching run-briefs to $repo"
+            curl -sS -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $REPO_PAT" \
+              "https://api.github.com/repos/$repo/dispatches" \
+              -d '{"event_type":"run-briefs","client_payload":{"stage":"briefs"}}'
+          done
