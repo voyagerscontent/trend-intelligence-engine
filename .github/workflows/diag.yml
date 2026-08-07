@@ -23,9 +23,9 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID || vars.AIRTABLE_BASE_ID }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID || vars.AIRTABLE_BASE_ID || 'appSeOYXfUUEPDZwz' }}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL || vars.SLACK_CHANNEL }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL || vars.SLACK_CHANNEL || 'C0BNMT8EQ67' }}
           SEC_BASE: ${{ secrets.AIRTABLE_BASE_ID != '' }}
           VAR_BASE: ${{ vars.AIRTABLE_BASE_ID != '' }}
           SEC_CHAN: ${{ secrets.SLACK_CHANNEL != '' }}

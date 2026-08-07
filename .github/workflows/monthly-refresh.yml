@@ -34,9 +34,9 @@ jobs:
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID || vars.AIRTABLE_BASE_ID || 'appSeOYXfUUEPDZwz' }}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL || vars.SLACK_CHANNEL || 'C0BNMT8EQ67' }}
 
       # Optional: tell sibling repos to refresh, too. No-op unless BOTH a
       # REPO_PAT secret and a SIBLING_REPOS variable (comma-separated
