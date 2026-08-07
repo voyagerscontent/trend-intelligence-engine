@@ -1,18 +1,11 @@
 name: diag
-
-# Diagnostic: run the pipeline, capture ALL output, commit it back as
-# run-output.log so it can be read without the Actions API. Trigger by
-# pushing a change to .github/DIAG.
-
 on:
   push:
     paths:
       - '.github/DIAG'
   workflow_dispatch: {}
-
 permissions:
   contents: write
-
 jobs:
   diag:
     runs-on: ubuntu-latest
@@ -22,27 +15,28 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: pip install -e . 2>&1 | tee -a run-output.log
+        run: |
+          rm -f run-output.log
+          pip install -e . 2>&1 | tail -n 3 | tee -a run-output.log
       - name: Run pipeline (capture, non-fatal)
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          AHREFS_API_KEY: ${{ secrets.AHREFS_API_KEY }}
-          GSC_CREDENTIALS: ${{ secrets.GSC_CREDENTIALS }}
-          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
-          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
-          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID || vars.AIRTABLE_BASE_ID }}
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
-          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+          SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL || vars.SLACK_CHANNEL }}
+          SEC_BASE: ${{ secrets.AIRTABLE_BASE_ID != '' }}
+          VAR_BASE: ${{ vars.AIRTABLE_BASE_ID != '' }}
+          SEC_CHAN: ${{ secrets.SLACK_CHANNEL != '' }}
+          VAR_CHAN: ${{ vars.SLACK_CHANNEL != '' }}
         run: |
-          echo "== which secrets are present (names only) ==" | tee -a run-output.log
-          for v in ANTHROPIC_API_KEY AIRTABLE_TOKEN AIRTABLE_BASE_ID SLACK_TOKEN SLACK_CHANNEL; do
-            if [ -n "${!v}" ]; then echo "$v: set"; else echo "$v: MISSING"; fi
-          done | tee -a run-output.log
+          echo "AIRTABLE_BASE_ID -> secret:$SEC_BASE  variable:$VAR_BASE" | tee -a run-output.log
+          echo "SLACK_CHANNEL    -> secret:$SEC_CHAN  variable:$VAR_CHAN" | tee -a run-output.log
+          echo "resolved AIRTABLE_BASE_ID: $([ -n "$AIRTABLE_BASE_ID" ] && echo set || echo MISSING)" | tee -a run-output.log
+          echo "resolved SLACK_CHANNEL:    $([ -n "$SLACK_CHANNEL" ] && echo set || echo MISSING)" | tee -a run-output.log
           echo "== pipeline start ==" | tee -a run-output.log
-          python -m trendengine.pipeline --stage briefs 2>&1 | tee -a run-output.log
+          python -m trendengine.pipeline --stage briefs 2>&1 | grep -vE '^\[(airtable|slack) dry-run\]|would (upsert|post)|penguin chick|GEO target|Hero asset|Format:|keyword:|Brief|Audience|Angle|Property|Why now|Channel|Production|Visuals|Distribution|Blog|YouTube|Reels|IG |Email|PR ' | tee -a run-output.log
           echo "PIPELINE_EXIT=${PIPESTATUS[0]}" | tee -a run-output.log
       - name: Commit log back
         run: |
