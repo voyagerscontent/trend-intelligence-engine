@@ -1,0 +1,10 @@
+flowchart TD
+  R[run_pipeline] -->|per source| SF{source error?}
+  SF -->|yes| L1[log ingest error, source_errors++, continue]
+  SF -->|no| OK[collect signals]
+  R --> T{terminal error?}
+  T -->|yes| F1[log fatal] --> A[alert_failure -> Slack or printed alert] --> RE[re-raise: process exits non-zero, CI fails]
+  T -->|no| DONE[log done]
+  HTTP[external call] --> RB[request_with_retries: timeout + bounded backoff] --> HS{retryable 429/5xx?}
+  HS -->|yes, < max| RB
+  HS -->|4xx / max reached| RAISE[raise -> handled by terminal path]

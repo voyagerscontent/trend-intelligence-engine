@@ -1,0 +1,10 @@
+Eight red-flag blocker checks — 2026-08-03 (verified against deployed code)
+1 Secrets in plaintext ......... ABSENT   see secret-scan.txt; static-audit no_hardcoded_secrets PASS
+2 Unauth public webhook ........ N/A      no inbound listener; schedule-triggered pull only (grep: none)
+3 No idempotency on writes ..... ABSENT   Airtable performUpsert fieldsToMergeOn [Title,Brand] deliver/airtable.py
+4 No error path / silent loss .. ABSENT   fatal log + alert_failure + non-zero exit  pipeline.py / deliver/slack.py
+5 Irreversible destructive ..... ABSENT   no delete/overwrite/mass-send; delivery is upsert; dry-run default
+6 Unbounded retry .............. ABSENT   RetryPolicy(max_attempts=3, backoff, timeout)  obs.py
+7 No named owner ............... ADDRESSED owner named in docs/operations-runbook.md (Marcel) — pending his confirmation
+8 PII/regulated w/o basis ...... ABSENT   PII marker scan none; keyword/topic/aggregate data only  docs/data-contracts.md
+Active blockers: 0.

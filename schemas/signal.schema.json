@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trendengine/schemas/signal.schema.json",
+  "title": "Signal",
+  "description": "One normalised observation from a single source. Contract v0.1.0.",
+  "type": "object",
+  "required": ["source", "entity", "brand", "value", "change_pct", "captured_at"],
+  "additionalProperties": false,
+  "properties": {
+    "source": {"type": "string", "description": "source NAME, e.g. ahrefs_search"},
+    "entity": {"type": "string", "description": "keyword / prompt / topic / competitor"},
+    "brand": {"type": "string", "enum": ["galapagos", "voyagers", "polar"]},
+    "value": {"type": "number", "description": "volume/mentions/audience size"},
+    "change_pct": {"type": "number", "description": "momentum vs prior period, 0.35 = +35%"},
+    "captured_at": {"type": "string", "description": "ISO 8601 timestamp"},
+    "meta": {"type": "object", "description": "raw context; may include citation_gap, competitor"}
+  }
+}

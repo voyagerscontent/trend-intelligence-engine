@@ -1,0 +1,26 @@
+{"run_id": "fde08b40dffb", "event": "start", "level": "info", "stage": "all", "dry_run": true}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "ahrefs_search", "count": 3}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "brandradar", "count": 2}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "gsc", "count": 1}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "google_trends", "count": 2}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "social", "count": 2}
+{"run_id": "fde08b40dffb", "event": "ingest", "level": "info", "source": "news", "count": 1}
+{"run_id": "fde08b40dffb", "event": "score", "level": "info", "trends": 8, "escalated": 3, "min_sources": 2, "min_brand_fit": 0.7}
+[airtable dry-run] would upsert 3 record(s):
+[
+  {
+    "fields": {
+      "Title": "antarctica penguin chicks",
+      "Brand": "polar",
+      "Score": 78.0,
+      "Sources": 2,
+      "Rationale": "2 sources; driven by demand 1.00, freshness 1.00",
+      "Brief": "# BRIEF \u2014 antarctica penguin chicks   (score 78.0/100)\n\n**Property:** polar\n**Why now:** 2 sources; driven by demand 1.00, freshness 1.00\n**Angle / POV:** An expert, first-hand take on antarctica penguin chicks only this brand can credibly own.\n**Audience:** Affluent experience-seekers researching a bucket-list expedition. \u00b7 **intent:** dreaming\n\n## Hero asset\n- **Format:** Data study / editorial pillar\n- **Primary keyword:** antarctica penguin chicks\n- **GEO target (AI prompt to win):** antarctica penguin chicks\n- **Bait mechanic:** Proprietary data or a defensible ranking that earns links and AI citations.\n\n## Channel cutdowns\n- **Blog / editorial:** Pillar page targeting 'antarctica penguin chicks'.\n- **YouTube:** Long-form hero cut with a strong thumbnail hook.\n- **Reels / TikTok:** 3\u20135 native vertical cutdowns from the hero footage.\n- **IG carousel:** Data/insight carousel; save-worthy first frame.\n- **Email:** Segment to dreamers in the relevant destination interest.\n- **PR pitch:** Offer the data asset to travel press as an exclusive.\n## Production\n- **Visuals:** Cinematic destination footage; a striking data-viz for the bait asset.\n- **Distribution & CTA:** Route engaged readers to a Voyagers enquiry / advisor consult
+[slack dry-run] would post:
+*Weekly trend shortlist* — approve to brief:
+1. *78.0* · [polar] antarctica penguin chicks — 2 sources; driven by demand 1.00, freshness 1.00
+2. *74.5* · [galapagos] which galapagos cruise is best for families — 2 sources; driven by freshness 1.00, competitive_gap 0.90
+3. *65.3* · [polar] best time to see penguins antarctica — 2 sources; driven by freshness 1.00, brand_fit 0.85
+{"run_id": "fde08b40dffb", "event": "done", "level": "info", "signals": 11, "trends": 8, "escalated": 3, "briefed": 3, "source_errors": 0}
+
+DONE · signals=11 trends=8 escalated=3 briefed=3

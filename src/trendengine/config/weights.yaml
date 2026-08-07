@@ -1,0 +1,15 @@
+# Trend scoring model — tune these without touching code.
+# The six 'weights' keys MUST match trendengine.score.FACTORS exactly
+# (the auditor enforces this) and MUST sum to 1.0.
+weights:
+  demand: 0.20            # absolute search volume / audience size
+  momentum: 0.25         # rate of change — how fast it is rising now
+  brand_fit: 0.20        # maps to a real, on-brand, high-margin product (luxury gate)
+  competitive_gap: 0.15  # how weakly it is currently owned / how beatable incumbents are
+  monetisability: 0.15   # proximity to a booking (dreaming vs high-intent)
+  freshness: 0.05        # recency decay — penalise stale spikes
+
+thresholds:
+  min_sources_to_escalate: 2   # a trend must corroborate across >=2 sources
+  min_score_to_brief: 65       # only briefs at/above this score are generated
+  min_brand_fit: 0.70          # LUXURY GATE: off-brand trends never reach a brief

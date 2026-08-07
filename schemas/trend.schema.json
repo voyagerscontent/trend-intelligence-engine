@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trendengine/schemas/trend.schema.json",
+  "title": "Trend",
+  "description": "A cluster of corroborating signals, scored and ranked. Contract v0.1.0.",
+  "type": "object",
+  "required": ["title", "brand", "signals", "factors", "score"],
+  "properties": {
+    "title": {"type": "string"},
+    "brand": {"type": "string", "enum": ["galapagos", "voyagers", "polar"]},
+    "signals": {"type": "array", "items": {"$ref": "signal.schema.json"}},
+    "factors": {
+      "type": "object",
+      "description": "per-factor 0..1; keys MUST equal score.FACTORS",
+      "required": ["demand", "momentum", "brand_fit", "competitive_gap", "monetisability", "freshness"],
+      "additionalProperties": false,
+      "properties": {
+        "demand": {"type": "number", "minimum": 0, "maximum": 1},
+        "momentum": {"type": "number", "minimum": 0, "maximum": 1},
+        "brand_fit": {"type": "number", "minimum": 0, "maximum": 1},
+        "competitive_gap": {"type": "number", "minimum": 0, "maximum": 1},
+        "monetisability": {"type": "number", "minimum": 0, "maximum": 1},
+        "freshness": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "score": {"type": "number", "minimum": 0, "maximum": 100},
+    "rationale": {"type": "string"}
+  }
+}

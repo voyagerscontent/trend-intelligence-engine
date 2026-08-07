@@ -1,0 +1,13 @@
+flowchart LR
+  subgraph LISTEN
+    A[sources/*.fetch] --> N[normalize.normalize]
+  end
+  N --> C[cluster.cluster]
+  C --> S[score.score_trend / rank]
+  S -->|corroboration + brand-fit gates| E{escalated?}
+  E -->|yes| B[brief.generate_brief]
+  E -->|no| X[logged, not briefed]
+  B --> D1[deliver.deliver_airtable idempotent upsert]
+  B --> D2[deliver.deliver_slack shortlist]
+  D1 --> Z[(Airtable board)]
+  D2 --> Y[(Slack approval)]

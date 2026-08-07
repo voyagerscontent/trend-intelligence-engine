@@ -1,0 +1,41 @@
+# The properties this engine monitors, plus competitors and seed topics.
+# Editing this file re-targets the whole system — no code change required.
+brands:
+  galapagos:
+    name: GalapagosIslands.travel
+    role: editorial            # informational / lead-gen property
+    booking_platform: voyagers
+    # theme_terms: destination words that appear in almost every signal, so they
+    # can't be used to corroborate a trend (clustering excludes them).
+    theme_terms: [galapagos]
+    seed_topics:
+      - galapagos cruise
+      - galapagos wildlife
+      - best time to visit galapagos
+    competitors:
+      - example-galapagos-operator.com
+  voyagers:
+    name: Voyagers Travel
+    role: booking              # transactional platform
+    booking_platform: self
+    theme_terms: [antarctica, expedition]
+    seed_topics:
+      - antarctica trips
+      - luxury expedition cruise
+      - south america luxury travel
+    competitors:
+      - example-expedition-operator.com
+  polar:
+    name: Polar Cruises & Tours
+    role: booking
+    booking_platform: self
+    theme_terms: [antarctica, arctic, polar]
+    seed_topics:
+      - antarctica cruise
+      - arctic expedition
+      - polar wildlife
+    competitors:
+      - example-polar-operator.com
+
+# Author entity used for E-E-A-T / GEO attribution and brief voice.
+author_entity: Stephen Sancho

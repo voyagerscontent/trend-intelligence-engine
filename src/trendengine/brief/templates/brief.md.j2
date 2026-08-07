@@ -1,0 +1,26 @@
+# BRIEF — {{ b.title }}   (score {{ trend.score }}/100)
+
+**Property:** {{ b.brand }}
+**Why now:** {{ rationale }}
+**Angle / POV:** {{ b.angle }}
+**Audience:** {{ b.audience }} · **intent:** {{ b.intent_stage }}
+
+## Hero asset
+- **Format:** {{ b.hero_format }}
+- **Primary keyword:** {{ b.keyword }}
+- **GEO target (AI prompt to win):** {{ b.ai_prompt }}
+- **Bait mechanic:** {{ b.bait_mechanic }}
+
+## Channel cutdowns
+{% for ch, note in b.channels.items() %}- **{{ ch }}:** {{ note }}
+{% endfor %}
+## Production
+- **Visuals:** {{ b.visual_notes }}
+- **Distribution & CTA:** {{ b.cta }}
+
+## Accountability
+- **Owner:** {{ b.owner or "____" }}  ·  **Due:** {{ b.due or "____" }}  ·  **KPI:** {{ b.kpi or "____" }}
+
+---
+_Signals: {{ trend.signals | length }} across {{ trend.source_count }} sources
+({{ trend.signals | map(attribute='source') | list | unique | join(', ') }})._

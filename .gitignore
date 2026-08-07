@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Secrets — never commit real credentials
+.env
+*.local
+
+# Data / artifacts
+data/
+out/
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

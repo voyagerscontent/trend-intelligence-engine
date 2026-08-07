@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trendengine/schemas/brief.schema.json",
+  "title": "Brief",
+  "description": "The deliverable: a multichannel content brief for one trend. Contract v0.1.0.",
+  "type": "object",
+  "required": ["title", "brand", "angle", "hero_format", "keyword", "channels"],
+  "properties": {
+    "title": {"type": "string"},
+    "brand": {"type": "string", "enum": ["galapagos", "voyagers", "polar"]},
+    "angle": {"type": "string"},
+    "audience": {"type": "string"},
+    "intent_stage": {"type": "string"},
+    "hero_format": {"type": "string"},
+    "keyword": {"type": "string"},
+    "ai_prompt": {"type": "string", "description": "GEO/AEO target"},
+    "bait_mechanic": {"type": "string"},
+    "channels": {"type": "object", "additionalProperties": {"type": "string"}},
+    "visual_notes": {"type": "string"},
+    "cta": {"type": "string"},
+    "owner": {"type": "string"},
+    "due": {"type": "string"},
+    "kpi": {"type": "string"},
+    "body_markdown": {"type": "string"}
+  }
+}
