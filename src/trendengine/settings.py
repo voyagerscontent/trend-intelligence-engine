@@ -11,7 +11,9 @@ from dataclasses import dataclass, field
 
 
 def _get(name: str, default: str = "") -> str:
-    return os.getenv(name, default)
+    # .strip() so a stray trailing newline or space from a pasted secret
+    # can't corrupt an HTTP header (a common cause of "InvalidHeader").
+    return os.getenv(name, default).strip()
 
 
 @dataclass(frozen=True)
