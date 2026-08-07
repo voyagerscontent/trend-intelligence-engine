@@ -5,7 +5,7 @@ Dry-run (no SLACK_TOKEN) prints the message instead of posting.
 from __future__ import annotations
 
 from ..models import Trend
-from ..obs import RetryPolicy, request_with_retries
+from ..obs import RetryPolicy, redact, request_with_retries
 from ..settings import Settings
 
 _API = "https://slack.com/api/chat.postMessage"
@@ -38,7 +38,7 @@ def alert_failure(settings: Settings, run_id: str, summary: str, dry_run: bool =
     Falls back to a printed alert line when Slack isn't configured, so the
     failure is always surfaced somewhere the operator can see it.
     """
-    text = f":rotating_light: trend-engine run {run_id} FAILED — {summary}"
+    text = redact(f":rotating_light: trend-engine run {run_id} FAILED — {summary}")
     if dry_run or not (settings.slack_token and settings.slack_channel):
         print("[alert] " + text)
         return text

@@ -13,10 +13,26 @@ See docs/observability.md and docs/error-handling.md.
 from __future__ import annotations
 
 import json
+import re
 import sys
 import time
 import uuid
 from dataclasses import dataclass, field
+
+# Never let a credential reach a log line, an exception repr, or an alert.
+# Matches Airtable PATs, Slack tokens, Anthropic keys, and any "Bearer <x>".
+_SECRET_RE = re.compile(
+    r"(pat[A-Za-z0-9]{10,}\.[A-Za-z0-9]{16,})"
+    r"|(xox[baprs]-[A-Za-z0-9-]{10,})"
+    r"|(sk-ant-[A-Za-z0-9\-]{10,})"
+    r"|(key[A-Za-z0-9]{14,})"
+    r"|(Bearer\s+\S+)"
+)
+
+
+def redact(text: str) -> str:
+    """Scrub anything that looks like a token out of a string."""
+    return _SECRET_RE.sub("[REDACTED]", text)
 
 
 def new_run_id() -> str:
@@ -29,10 +45,13 @@ def log_event(run_id: str, event: str, level: str = "info", **fields) -> None:
 
     `event` is the pipeline phase/name (start, ingest, score, http, done, ...);
     extra keyword fields are merged in (e.g. stage=, source=, count=).
+
+    The serialized line is redacted before printing so a token can never leak
+    into logs, even via an exception repr (e.g. requests' InvalidHeader).
     """
     record = {"run_id": run_id, "event": event, "level": level}
     record.update(fields)
-    print(json.dumps(record, default=str), file=sys.stdout, flush=True)
+    print(redact(json.dumps(record, default=str)), file=sys.stdout, flush=True)
 
 
 @dataclass
